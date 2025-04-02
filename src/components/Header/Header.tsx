@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import './header.css'
+import 'remixicon/fonts/remixicon.css'
 
 const Header = () => {
 
@@ -19,7 +21,42 @@ const Header = () => {
 
     {/*toggle ikon osztálya: ri-apps-2-fill */}
 
-    return()
+    const [showMenu, setShowMenu] = useState(false)
+    const [shadow, setShadow] = useState(false)
+
+    const handleShowMenu = (b:boolean)=>{
+        setShowMenu(b)
+    }
+
+    useEffect(()=>{
+        const handleScroll = ()=>{
+            setShadow(window.scrollY>=50)
+        }
+        window.addEventListener("scroll", handleScroll)
+    })
+
+    return(
+        <div className={`header ${shadow ? "shadow-header":""}`}>
+            <nav>
+                <a href='' className='nav__logo'>STARCOFFEE</a>
+                <div className={`nav__menu ${showMenu?"show-menu":""}`}>
+                    <ul className='nav__list'>
+                        {["HOME", "POPILAR", "ABOUT US", "PRODUCTS", "CONTACT"].map(item=>(
+                            <li>
+                                <a href={`#${item.toLowerCase().replace(" ","")}`} className='nav__link'>{item}</a>
+                            </li>
+                        ))}
+                    </ul>
+                    <div onClick={()=>handleShowMenu(false)} className='nav__close'>
+                        <i className='ri-close-large-line'></i>
+                    </div>
+                </div>
+                <div onClick={()=>handleShowMenu(true)} className='nav__toggle'>
+                        <i className='ri-apps-2-fill'></i>
+                </div>
+            </nav>
+        </div>
+    )
 }
 
 export default Header
